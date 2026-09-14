@@ -18,3 +18,7 @@ numpy
 opencv-contrib-python
 google-auth
 requests
+openmeteo-requests
+requests-cache
+retry-requests
+geopy

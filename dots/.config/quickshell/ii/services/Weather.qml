@@ -81,25 +81,14 @@ Singleton {
     }
 
     function getData() {
-        let command = "curl -s wttr.in";
-
+        let command = [Directories.weatherScriptPath];
         if (root.gpsActive && root.location.valid) {
-            command += `/${root.location.lat},${root.location.long}`;
-        } else {
-            command += `/${formatCityName(root.city)}`;
+            command.push(`${root.location.lat}`, `${root.location.long}`);
+        } else if (root.city.length > 0) {
+            command.push(root.city);
         }
-
-        // format as json
-        command += "?format=j1";
-        command += " | ";
-        // only take the current weather, location, asytronmy data
-        command += "jq '{current: .current_condition[0], location: .nearest_area[0], astronomy: .weather[0].astronomy[0]}'";
-        fetcher.command[2] = command;
+        fetcher.command = command;
         fetcher.running = true;
-    }
-
-    function formatCityName(cityName) {
-        return cityName.trim().split(/\s+/).join('+');
     }
 
     Component.onCompleted: {
